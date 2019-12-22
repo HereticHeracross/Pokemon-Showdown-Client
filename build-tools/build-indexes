@@ -890,7 +890,15 @@ console.log("DONE");
 process.stdout.write("Building `data/moves,items,abilities,typechart,learnsets.js`...");
 
 {
-	const Movedex = requireNoCache('../data/Pokemon-Paradise/data/moves.js').BattleMovedex;
+    const Movedex = requireNoCache('../data/Pokemon-Paradise/data/moves.js').BattleMovedex;
+    const prismMovedex = requireNoCache('../data/Pokemon-Paradise/data/mods/rby890/moves.js').BattleMovedex;
+    for(const id in prismMovedex) {
+        if(id in Movedex) {
+            Object.assign(Movedex[id], prismMovedex[id]);
+        } else {
+            Movedex[id] = prismMovedex[id];
+        }
+    }
 	const buf = 'exports.BattleMovedex = ' + es3stringify(Movedex) + ';';
 	fs.writeFileSync('data/moves.js', buf);
 }
