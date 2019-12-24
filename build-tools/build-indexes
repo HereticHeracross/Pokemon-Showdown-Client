@@ -782,9 +782,10 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 	}
 	const RBY890Learnsets = Dex.mod('rby890').data.Learnsets;
 	for (const id in RBY890Learnsets) {
+		const template = Dex.mod('rby890').getTemplate(id);
+		const baseTemplate = Dex.mod('rby890').getTemplate(template.baseSpecies);
 		const learnset = RBY890Learnsets[id].learnset;
 		for (const moveid in learnset) {
-			if (!learnsets[id][moveid]) learnsets[id][moveid] = ''; // should never happen
 			learnsets[id][moveid] = '1' + learnsets[id][moveid];
 		}
 	}
