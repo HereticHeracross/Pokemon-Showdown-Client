@@ -803,6 +803,7 @@
 		if (format.includes('doubles')) this.isDoubles = true;
 		var isLetsGo = format.startsWith('letsgo');
 		var isRBY890 = format.startsWith('rby890');
+		if (isRBY890) format = format.slice(6);
 		if (isLetsGo) format = format.slice(6);
 		var isNatDex = format.startsWith('nationaldex');
 		if (isNatDex) {

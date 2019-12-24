@@ -1158,6 +1158,7 @@ this.dex=Dex;
 this.isDoubles=format.includes('doubles');
 this.isLetsGo=format.startsWith('letsgo');
 this.isRBY890=format.startsWith('rby890');
+if(this.isRBY890)format=format.slice(6);
 if(this.isLetsGo)format=format.slice(6);
 
 this.results=null;
