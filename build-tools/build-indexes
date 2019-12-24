@@ -289,22 +289,22 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 	let buf = '// DO NOT EDIT - automatically built with build-tools/build-indexes\n\n';
 
 	// process.stdout.write("\n  ");
-	for (const genIdent of [8.1, 8, -8, 7.1, 7, -7.5, -7, 6, -6, 5, -5, 4, -4, "RSE890", 3, 2, "RBY890", 1]) {
+	for (const genIdent of [8.1, 8, -8, 7.1, 7, -7.5, -7, 6, -6, 5, -5, 4, -4, 3.1, 3, 2, 1.1, 1]) {
 		const isLetsGo = (genIdent === 7.1);
-		const isRBY890 = (genIdent === "RBY890");
-		const isRSE890 = (genIdent === "RSE890");
+		const isRBY890 = (genIdent === 1.1);
+		const isRSE890 = (genIdent === 3.1);
 		const isNatDex = (genIdent === 8.1);
 		const isDoubles = (genIdent < 0);
 		const isVGC = (genIdent === -7.5);
 		const genNum = Math.floor(isDoubles ? -genIdent : genIdent);
 		const gen = (() => {
-		  if (isLetsGo)
+		if (isLetsGo)
 			return 'letsgo'
 		if (isRBY890)
 			return 'rby890'
 		if (isRSE890)
-			return 'rby890'
-		  else
+			return 'rse890'
+		else
 			return 'gen' + genNum;
 		})();
 		// process.stdout.write("" + gen + (isDoubles ? " doubles" : "") + "... ");
@@ -798,28 +798,9 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			learnsets[id][moveid] = '3' + learnsets[id][moveid];
 		}
 	}
-	const G3Learnsets = Dex.mod('gen3').data.Learnsets;
-	for (const id in G3Learnsets) {
-		const template = Dex.mod('gen3').getTemplate(id);
-		const baseTemplate = Dex.mod('gen3').getTemplate(template.baseSpecies);
-		const learnset = G3Learnsets[id].learnset;
-		for (const moveid in learnset) {
-			learnsets[id][moveid] = '3' + learnsets[id][moveid];
-		}
-	}
-	const G1Learnsets = Dex.mod('gen1').data.Learnsets;
-	for (const id in G1Learnsets) {
-		const template = Dex.mod('gen1').getTemplate(id);
-		const baseTemplate = Dex.mod('gen1').getTemplate(template.baseSpecies);
-		const learnset = G1Learnsets[id].learnset;
-		for (const moveid in learnset) {
-			learnsets[id][moveid] = '1' + learnsets[id][moveid];
-		}
-	}
 	var util = require('util');
 	util.inspect.defaultOptions.maxArrayLength = null;
 	util.inspect.defaultOptions.depth = null;
-	output = util.inspect(G3Learnsets)
 	
 	//
 	// Past gen table
@@ -1026,6 +1007,8 @@ process.stdout.write("Building `data/moves,items,abilities,typechart,learnsets.j
 }
 
 console.log("DONE");
+
+output = util.inspect(Dex.dexes.gen3.data.Learnsets)
 
 // Write data in 'output.txt' . 
 fs.writeFile('output.txt', output, (err) => { 
