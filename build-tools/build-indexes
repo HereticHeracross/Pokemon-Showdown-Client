@@ -289,10 +289,10 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 	let buf = '// DO NOT EDIT - automatically built with build-tools/build-indexes\n\n';
 
 	// process.stdout.write("\n  ");
-	for (const genIdent of [8.1, 8, -8, 7.1, 7, -7.5, -7, 6, -6, 5, -5, 4, -4, 3.1, 3, 2, 1.1, 1]) {
+	for (const genIdent of [8.1, 8, -8, 7.1, 7, -7.5, -7, 6, -6, 5, -5, 4, -4, 3, 2, -2, 1, -1]) {
 		const isLetsGo = (genIdent === 7.1);
-		const isRBY890 = (genIdent === 1.1);
-		const isRSE890 = (genIdent === 3.1);
+		const isRBY890 = (genIdent === -1);
+		const isRSE890 = (genIdent === -2);
 		const isNatDex = (genIdent === 8.1);
 		const isDoubles = (genIdent < 0);
 		const isVGC = (genIdent === -7.5);
@@ -780,27 +780,33 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			BattleTeambuilderTable['letsgo'].learnsets[id][moveid] = '7';
 		}
 	}
-	const RBY890Learnsets = Dex.mod('rby890').data.Learnsets;
-	for (const id in RBY890Learnsets) {
+	const G1890Learnsets = Dex.mod('rby890').data.Learnsets;
+	for (const id in G1890Learnsets) {
 		const template = Dex.mod('rby890').getTemplate(id);
 		const baseTemplate = Dex.mod('rby890').getTemplate(template.baseSpecies);
-		const learnset = RBY890Learnsets[id].learnset;
+		const learnset = G1890Learnsets[id].learnset;
+		BattleTeambuilderTable['rby890'].learnsets = Dex.dexes.rse890.data.Learnsets
+		BattleTeambuilderTable['rby890'].learnsets[id] = {};
 		for (const moveid in learnset) {
-			learnsets[id][moveid] = '1' + learnsets[id][moveid];
+			learnsets[id][moveid] = '-1' + learnsets[id][moveid];
 		}
 	}
-	const RSE890Learnsets = Dex.mod('rse890').data.Learnsets;
-	for (const id in RSE890Learnsets) {
+	const G3890Learnsets = Dex.mod('rse890').data.Learnsets;
+	for (const id in G3890Learnsets) {
 		const template = Dex.mod('rse890').getTemplate(id);
 		const baseTemplate = Dex.mod('rse890').getTemplate(template.baseSpecies);
-		const learnset = RSE890Learnsets[id].learnset;
+		const learnset = G3890Learnsets[id].learnset;
+		BattleTeambuilderTable['rse890'].learnsets = Dex.dexes.rse890.data.Learnsets
+		BattleTeambuilderTable['rse890'].learnsets[id] = {};
 		for (const moveid in learnset) {
-			learnsets[id][moveid] = '3' + learnsets[id][moveid];
+			learnsets[id][moveid] = '-2' + learnsets[id][moveid];
 		}
 	}
+	
 	var util = require('util');
 	util.inspect.defaultOptions.maxArrayLength = null;
 	util.inspect.defaultOptions.depth = null;
+	output = (util.inspect(BattleTeambuilderTable))	
 	
 	//
 	// Past gen table
@@ -1007,8 +1013,6 @@ process.stdout.write("Building `data/moves,items,abilities,typechart,learnsets.j
 }
 
 console.log("DONE");
-
-output = util.inspect(Dex.dexes.gen3.data.Learnsets)
 
 // Write data in 'output.txt' . 
 fs.writeFile('output.txt', output, (err) => { 
