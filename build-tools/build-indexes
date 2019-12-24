@@ -791,7 +791,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		const baseTemplate = Dex.mod('rby890').getTemplate(template.baseSpecies);
 		const learnset = G1890Learnsets[id].learnset;
 		for (const moveid in learnset) {
-			learnsets[id][moveid] = '-1' + learnsets[id][moveid];
+			learnsets[id][moveid] = '1' + learnsets[id][moveid];
 		}
 	}
 	const G3890Learnsets = Dex.mod('rse890').data.Learnsets;
