@@ -804,6 +804,8 @@
 		var isLetsGo = format.startsWith('letsgo');
 		var isRBY890 = format.startsWith('rby890');
 		if (isRBY890) format = format.slice(6);
+		var isRSE890 = format.startsWith('rse890');
+		if (isRSE890) format = format.slice(6);
 		if (isLetsGo) format = format.slice(6);
 		var isNatDex = format.startsWith('nationaldex');
 		if (isNatDex) {
@@ -840,6 +842,8 @@
 				table = table['letsgo'];
 			} else if (isRBY890) {
 				table = table['rby890'];
+			} else if (isRSE890) {
+				table = table['rse890'];
 			} else if (isNatDex) {
 				table = table['natdex'];
 			}
@@ -976,6 +980,7 @@
 				var learnset = BattleTeambuilderTable.learnsets[learnsetid];
 				if (isLetsGo) learnset = BattleTeambuilderTable['letsgo'].learnsets[learnsetid];
 				if (isRBY890) learnset = BattleTeambuilderTable['rby890'].learnsets[learnsetid];
+				if (isRSE890) learnset = BattleTeambuilderTable['rse890'].learnsets[learnsetid];
 				if (learnset) {
 					for (var moveid in learnset) {
 						var learnsetEntry = learnset[moveid];

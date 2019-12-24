@@ -518,6 +518,8 @@ table=table['gen'+this.gen];
 table=table['letsgo'];
 }else if(this.isRBY890){
 table=table['rby890'];
+}else if(this.isRSE890){
+table=table['rse890'];
 }
 
 if(!table.tierSet){
@@ -612,6 +614,7 @@ while(learnsetid){
 var learnset=BattleTeambuilderTable.learnsets[learnsetid];
 if(this.isLetsGo)learnset=BattleTeambuilderTable['letsgo'].learnsets[learnsetid];
 if(this.isRBY890)learnset=BattleTeambuilderTable['rby890'].learnsets[learnsetid];
+if(this.isRSE890)learnset=BattleTeambuilderTable['rse890'].learnsets[learnsetid];
 if(learnset){
 for(var moveid in learnset){
 var learnsetEntry=learnset[moveid];
@@ -1159,6 +1162,8 @@ this.isDoubles=format.includes('doubles');
 this.isLetsGo=format.startsWith('letsgo');
 this.isRBY890=format.startsWith('rby890');
 if(this.isRBY890)format=format.slice(6);
+this.isRBY890=format.startsWith('rse890');
+if(this.isRSE890)format=format.slice(6);
 if(this.isLetsGo)format=format.slice(6);
 
 this.results=null;
