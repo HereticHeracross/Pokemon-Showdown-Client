@@ -23,7 +23,6 @@ const Dex = require('../data/Pokemon-Paradise/.sim-dist/dex').Dex;
 Dex.includeModData()
 const toID = Dex.getId;
 process.stdout.write("Loading gen 6 data... ");
-Object.assign(Dex.data.Movedex, Dex.dexes.rby890.data.Movedex)
 Dex.includeData();
 console.log("DONE");
 
@@ -38,6 +37,8 @@ function requireNoCache(pathSpec) {
 	delete require.cache[require.resolve(pathSpec)];
 	return require(pathSpec);
 }
+
+var output = "";
 
 /*********************************************************
  * Build search-index.js
@@ -288,13 +289,24 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 	let buf = '// DO NOT EDIT - automatically built with build-tools/build-indexes\n\n';
 
 	// process.stdout.write("\n  ");
-	for (const genIdent of [8.1, 8, -8, 7.1, 7, -7.5, -7, 6, -6, 5, -5, 4, -4, 3, 2, 1]) {
+	for (const genIdent of [8.1, 8, -8, 7.1, 7, -7.5, -7, 6, -6, 5, -5, 4, -4, "RSE890", 3, 2, "RBY890", 1]) {
 		const isLetsGo = (genIdent === 7.1);
+		const isRBY890 = (genIdent === "RBY890");
+		const isRSE890 = (genIdent === "RSE890");
 		const isNatDex = (genIdent === 8.1);
 		const isDoubles = (genIdent < 0);
 		const isVGC = (genIdent === -7.5);
 		const genNum = Math.floor(isDoubles ? -genIdent : genIdent);
-		const gen = isLetsGo ? 'letsgo' : 'gen' + genNum;
+		const gen = (() => {
+		  if (isLetsGo)
+			return 'letsgo'
+		if (isRBY890)
+			return 'rby890'
+		if (isRSE890)
+			return 'rby890'
+		  else
+			return 'gen' + genNum;
+		})();
 		// process.stdout.write("" + gen + (isDoubles ? " doubles" : "") + "... ");
 		const pokemon = Object.keys(Dex.data.Pokedex);
 		pokemon.sort();
@@ -312,11 +324,17 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 					let tier = template.tier;
 					if (template.tier === 'Illegal' || template.isNonstandard === 'Past' || template.isUnreleased === 'Past') tier = Dex.mod('gen7').getTemplate(template.species).tier;
 					let banlist = Dex.getFormat('gen8nationaldex').banlist;
-					if (tier === 'Uber') {
-						if (banlist.includes(template.species) || banlist.includes(template.species + '-Base')) return tier;
-						if (banlist.includes(template.baseSpecies)) return tier;
-						if (['Zygarde-Complete', 'Necrozma-Ultra'].includes(template.species)) return tier;
+					if (
+						banlist.includes(template.species) ||
+						banlist.includes(template.species + '-Base') ||
+						banlist.includes(template.baseSpecies) ||
+						['Zygarde-Complete', 'Necrozma-Ultra'].includes(template.species)
+					)  {
+						tier = 'Uber';
+						return tier;
+					} else if (tier === 'Uber') { // This check is for Pokemon tiered as Uber but aren't in the banlist for National Dex
 						tier = 'OU';
+						return tier;
 					}
 					if (['Meltan', 'Melmetal', 'Melmetal-Gmax'].includes(template.species)) tier = 'OU';
 					if (template.species === 'Toxtricity-Gmax') tier = Dex.getTemplate('toxtricity').tier;
@@ -327,6 +345,14 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 					let validNum = (baseTemplate.num <= 151 && baseTemplate.num >= 1) || [808, 809].includes(baseTemplate.num);
 					if (!validNum) return 'Illegal';
 					if (template.forme && !['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) return 'Illegal';
+					return template.tier;
+				}
+				if (isRBY890) {
+					let baseTemplate = Dex.mod(gen).getTemplate(template.baseSpecies);
+					return template.tier;
+				}
+				if (isRSE890) {
+					let baseTemplate = Dex.mod(gen).getTemplate(template.baseSpecies);
 					return template.tier;
 				}
 				if (isVGC) {
@@ -400,6 +426,18 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			BattleTeambuilderTable['letsgo'].tiers = tiers;
 			BattleTeambuilderTable['letsgo'].overrideTier = overrideTier;
 			BattleTeambuilderTable['letsgo'].formatSlices = formatSlices;
+		} else if (isRBY890) {
+			BattleTeambuilderTable['rby890'] = {};
+			BattleTeambuilderTable['rby890'].learnsets = {};
+			BattleTeambuilderTable['rby890'].tiers = tiers;
+			BattleTeambuilderTable['rby890'].overrideTier = overrideTier;
+			BattleTeambuilderTable['rby890'].formatSlices = formatSlices;
+		} else if (isRSE890) {
+			BattleTeambuilderTable['rse890'] = {};
+			BattleTeambuilderTable['rse890'].learnsets = {};
+			BattleTeambuilderTable['rse890'].tiers = tiers;
+			BattleTeambuilderTable['rse890'].overrideTier = overrideTier;
+			BattleTeambuilderTable['rse890'].formatSlices = formatSlices;
 		} else if (isVGC) {
 			BattleTeambuilderTable[gen + 'vgc'] = {};
 			BattleTeambuilderTable[gen + 'vgc'].tiers = tiers;
@@ -729,14 +767,6 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			if (minGen === 1) learnsets[id][moveid] = '12' + learnsets[id][moveid];
 		}
 	}
-	const PrismLearnsets = Dex.mod('rby890').data.Learnsets;
-    for (const id in PrismLearnsets) {
-            const learnset = PrismLearnsets[id].learnset;
-            learnsets[id] = {};
-            for (const move in learnset) {
-                learnsets[id][move] = '1234567pq';
-        }
-    }
 	const LGLearnsets = Dex.mod('letsgo').data.Learnsets;
 	for (const id in LGLearnsets) {
 		const template = Dex.mod('letsgo').getTemplate(id);
@@ -750,7 +780,46 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			BattleTeambuilderTable['letsgo'].learnsets[id][moveid] = '7';
 		}
 	}
-
+	const RBY890Learnsets = Dex.mod('rby890').data.Learnsets;
+	for (const id in RBY890Learnsets) {
+		const learnset = RBY890Learnsets[id].learnset;
+		for (const moveid in learnset) {
+			if (!learnsets[id][moveid]) learnsets[id][moveid] = ''; // should never happen
+			learnsets[id][moveid] = '1' + learnsets[id][moveid];
+		}
+	}
+	const RSE890Learnsets = Dex.mod('rse890').data.Learnsets;
+	for (const id in RSE890Learnsets) {
+		const template = Dex.mod('rse890').getTemplate(id);
+		const baseTemplate = Dex.mod('rse890').getTemplate(template.baseSpecies);
+		const learnset = RSE890Learnsets[id].learnset;
+		for (const moveid in learnset) {
+			learnsets[id][moveid] = '3' + learnsets[id][moveid];
+		}
+	}
+	const G3Learnsets = Dex.mod('gen3').data.Learnsets;
+	for (const id in G3Learnsets) {
+		const template = Dex.mod('gen3').getTemplate(id);
+		const baseTemplate = Dex.mod('gen3').getTemplate(template.baseSpecies);
+		const learnset = G3Learnsets[id].learnset;
+		for (const moveid in learnset) {
+			learnsets[id][moveid] = '3' + learnsets[id][moveid];
+		}
+	}
+	const G1Learnsets = Dex.mod('gen1').data.Learnsets;
+	for (const id in G3Learnsets) {
+		const template = Dex.mod('gen1').getTemplate(id);
+		const baseTemplate = Dex.mod('gen1').getTemplate(template.baseSpecies);
+		const learnset = G3Learnsets[id].learnset;
+		for (const moveid in learnset) {
+			learnsets[id][moveid] = '1' + learnsets[id][moveid];
+		}
+	}
+	var util = require('util');
+	util.inspect.defaultOptions.maxArrayLength = null;
+	util.inspect.defaultOptions.depth = null;
+	output = util.inspect(G3Learnsets)
+	
 	//
 	// Past gen table
 	//
@@ -890,15 +959,7 @@ console.log("DONE");
 process.stdout.write("Building `data/moves,items,abilities,typechart,learnsets.js`...");
 
 {
-    const Movedex = requireNoCache('../data/Pokemon-Paradise/data/moves.js').BattleMovedex;
-    const prismMovedex = requireNoCache('../data/Pokemon-Paradise/data/mods/rby890/moves.js').BattleMovedex;
-    for(const id in prismMovedex) {
-        if(id in Movedex) {
-            Object.assign(Movedex[id], prismMovedex[id]);
-        } else {
-            Movedex[id] = prismMovedex[id];
-        }
-    }
+	const Movedex = requireNoCache('../data/Pokemon-Paradise/data/moves.js').BattleMovedex;
 	const buf = 'exports.BattleMovedex = ' + es3stringify(Movedex) + ';';
 	fs.writeFileSync('data/moves.js', buf);
 }
@@ -964,3 +1025,10 @@ process.stdout.write("Building `data/moves,items,abilities,typechart,learnsets.j
 }
 
 console.log("DONE");
+
+// Write data in 'output.txt' . 
+fs.writeFile('output.txt', output, (err) => { 
+      
+    // In case of a error throw err. 
+    if (err) throw err; 
+})

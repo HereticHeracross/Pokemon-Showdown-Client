@@ -1,6 +1,6 @@
 var Config = Config || {};
 
-/* version */ Config.version = "0.11.2 (db149bff)";
+/* version */ Config.version = "0.11.2 (2c34b937)";
 
 Config.bannedHosts = ['cool.jit.su', 'pokeball-nixonserver.rhcloud.com'];
 
