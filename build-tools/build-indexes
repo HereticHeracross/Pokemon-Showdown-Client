@@ -831,11 +831,6 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		BattleTeambuilderTable[gen].overrideHiddenAbility = overrideHiddenAbility;
 		const removeSecondAbility = {};
 		BattleTeambuilderTable[gen].removeSecondAbility = removeSecondAbility;
-		BattleTeambuilderTable['rby890'].overrideStats = overrideStats;
-		BattleTeambuilderTable['rby890'].overrideType = overrideType;
-		BattleTeambuilderTable['rby890'].overrideAbility = overrideAbility;
-		BattleTeambuilderTable['rby890'].overrideHiddenAbility = overrideHiddenAbility;
-		BattleTeambuilderTable['rby890'].removeSecondAbility = removeSecondAbility;
 		for (const id in genData.Pokedex) {
 			const pastEntry = genData.Pokedex[id];
 			const nowEntry = Dex.data.Pokedex[id];
