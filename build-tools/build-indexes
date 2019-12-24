@@ -807,10 +807,10 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		}
 	}
 	const G1Learnsets = Dex.mod('gen1').data.Learnsets;
-	for (const id in G3Learnsets) {
+	for (const id in G1Learnsets) {
 		const template = Dex.mod('gen1').getTemplate(id);
 		const baseTemplate = Dex.mod('gen1').getTemplate(template.baseSpecies);
-		const learnset = G3Learnsets[id].learnset;
+		const learnset = G1Learnsets[id].learnset;
 		for (const moveid in learnset) {
 			learnsets[id][moveid] = '1' + learnsets[id][moveid];
 		}
