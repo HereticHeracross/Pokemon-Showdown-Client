@@ -790,8 +790,10 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		const template = Dex.mod('rby890').getTemplate(id);
 		const baseTemplate = Dex.mod('rby890').getTemplate(template.baseSpecies);
 		const learnset = G1890Learnsets[id].learnset;
+		BattleTeambuilderTable['rby890'].learnsets = Dex.dexes.rby890.data.Learnsets
+		BattleTeambuilderTable['rby890'].learnsets[id] = {};
 		for (const moveid in learnset) {
-			learnsets[id][moveid] = '1' + learnsets[id][moveid];
+			BattleTeambuilderTable['rby890'].learnsets[id][moveid] = '1';
 		}
 	}
 	const G3890Learnsets = Dex.mod('rse890').data.Learnsets;
@@ -799,8 +801,10 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		const template = Dex.mod('rse890').getTemplate(id);
 		const baseTemplate = Dex.mod('rse890').getTemplate(template.baseSpecies);
 		const learnset = G3890Learnsets[id].learnset;
+		BattleTeambuilderTable['rse890'].learnsets = Dex.dexes.rse890.data.Learnsets
+		BattleTeambuilderTable['rse890'].learnsets[id] = {};
 		for (const moveid in learnset) {
-			learnsets[id][moveid] = '3' + learnsets[id][moveid];
+			BattleTeambuilderTable['rse890'].learnsets[id][moveid] = '3';
 		}
 	}
 	

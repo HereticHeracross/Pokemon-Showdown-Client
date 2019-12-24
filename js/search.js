@@ -802,6 +802,7 @@
 		}
 		if (format.includes('doubles')) this.isDoubles = true;
 		var isLetsGo = format.startsWith('letsgo');
+		var isRBY890 = format.startsWith('rby890');
 		if (isLetsGo) format = format.slice(6);
 		var isNatDex = format.startsWith('nationaldex');
 		if (isNatDex) {
@@ -836,6 +837,8 @@
 				table = table['gen' + this.gen];
 			} else if (isLetsGo) {
 				table = table['letsgo'];
+			} else if (isRBY890) {
+				table = table['rby890'];
 			} else if (isNatDex) {
 				table = table['natdex'];
 			}
@@ -971,6 +974,7 @@
 			while (learnsetid) {
 				var learnset = BattleTeambuilderTable.learnsets[learnsetid];
 				if (isLetsGo) learnset = BattleTeambuilderTable['letsgo'].learnsets[learnsetid];
+				if (isRBY890) learnset = BattleTeambuilderTable['rby890'].learnsets[learnsetid];
 				if (learnset) {
 					for (var moveid in learnset) {
 						var learnsetEntry = learnset[moveid];

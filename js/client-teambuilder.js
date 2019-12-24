@@ -1107,6 +1107,7 @@
 		renderSet: function (set, i) {
 			var template = Dex.getTemplate(set.species);
 			var isLetsGo = this.curTeam.format.startsWith('gen7letsgo');
+			var isRBY890 = this.curTeam.format.startsWith('gen1rby890');
 			var buf = '<li value="' + i + '">';
 			if (!set.species) {
 				if (this.deletedSet) {
@@ -2374,6 +2375,7 @@
 			var buf = '';
 			var set = this.curSet;
 			var isLetsGo = this.curTeam.format.startsWith('gen7letsgo');
+			var isRBY890 = this.curTeam.format.startsWith('gen1rby890');
 			var template = Dex.getTemplate(set.species);
 			if (!set) return;
 			buf += '<div class="resultheader"><h3>Details</h3></div>';
