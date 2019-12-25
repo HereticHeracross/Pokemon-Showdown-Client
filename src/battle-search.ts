@@ -50,6 +50,8 @@ class BattleSearch {
 	dex: ModdedDex = Dex;
 	private isDoubles = false;
 	private isLetsGo = false;
+	private isRBY890 = false;
+	private isRSE890 = false;
 	urlRoot = '//dex.pokemonshowdown.com/';
 
 	static gen = 8;
@@ -514,9 +516,14 @@ class BattleSearch {
 			isDoublesOrBS = true;
 		} else if (this.gen < 8) {
 			table = table['gen' + this.gen];
+		} else if (this.isRBY890) {
+			table = table['rby890'];
 		} else if (this.isLetsGo) {
 			table = table['letsgo'];
+		} else if (this.isRSE890) {
+			table = table['rse890'];
 		}
+		
 
 		if (!table.tierSet) {
 			table.tierSet = table.tiers.map((r: any) => {
@@ -609,6 +616,8 @@ class BattleSearch {
 		while (learnsetid) {
 			let learnset = BattleTeambuilderTable.learnsets[learnsetid];
 			if (this.isLetsGo) learnset = BattleTeambuilderTable['letsgo'].learnsets[learnsetid];
+			if (this.isRBY890) learnset = BattleTeambuilderTable['rby890'].learnsets[learnsetid];
+			if (this.isRSE890) learnset = BattleTeambuilderTable['rse890'].learnsets[learnsetid];
 			if (learnset) {
 				for (let moveid in learnset) {
 					let learnsetEntry = learnset[moveid];
@@ -1154,7 +1163,11 @@ class BattleSearch {
 
 		this.isDoubles = format.includes('doubles');
 		this.isLetsGo = format.startsWith('letsgo');
+		this.isRBY890 = format.startsWith('rby890');
+		this.isRSE890 = format.startsWith('rse890');
 		if (this.isLetsGo) format = format.slice(6) as ID;
+		if (this.isRBY890) format = format.slice(6) as ID;
+		if (this.isRSE890) format = format.slice(6) as ID;
 
 		this.results = null;
 		this.defaultResults = null;

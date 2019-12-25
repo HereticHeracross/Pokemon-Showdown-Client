@@ -894,6 +894,9 @@ var abilities=Object.assign({},data.abilities);
 if(id in table.overrideAbility){
 abilities['0']=table.overrideAbility[id];
 }
+if(id in rse890.overrideAbility){
+abilities['0']=rse890.overrideAbility[id];
+}
 if(id in table.removeSecondAbility){
 delete abilities['1'];
 }

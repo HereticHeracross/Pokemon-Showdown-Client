@@ -77,7 +77,9 @@ BattleSearch=function(){
 
 
 
-function BattleSearch(){var qType=arguments.length>0&&arguments[0]!==undefined?arguments[0]:'';var formatid=arguments.length>1&&arguments[1]!==undefined?arguments[1]:'';var set=arguments.length>2?arguments[2]:undefined;this.q=undefined;this.qType='';this.defaultResults=null;this.legalityFilter=null;this.legalityLabel="Illegal";this.exactMatch=false;this.results=null;this.filters=null;this.sortCol=null;this.cur=[];this.gen=8;this.dex=Dex;this.isDoubles=false;this.isLetsGo=false;this.urlRoot='//dex.pokemonshowdown.com/';
+
+
+function BattleSearch(){var qType=arguments.length>0&&arguments[0]!==undefined?arguments[0]:'';var formatid=arguments.length>1&&arguments[1]!==undefined?arguments[1]:'';var set=arguments.length>2?arguments[2]:undefined;this.q=undefined;this.qType='';this.defaultResults=null;this.legalityFilter=null;this.legalityLabel="Illegal";this.exactMatch=false;this.results=null;this.filters=null;this.sortCol=null;this.cur=[];this.gen=8;this.dex=Dex;this.isDoubles=false;this.isLetsGo=false;this.isRBY890=false;this.isRSE890=false;this.urlRoot='//dex.pokemonshowdown.com/';
 this.qType=qType;
 if(set){
 this.setType(qType,formatid,set);
@@ -514,13 +516,14 @@ table=table['gen'+this.gen+'doubles'];
 isDoublesOrBS=true;
 }else if(this.gen<8){
 table=table['gen'+this.gen];
-}else if(this.isLetsGo){
-table=table['letsgo'];
 }else if(this.isRBY890){
 table=table['rby890'];
+}else if(this.isLetsGo){
+table=table['letsgo'];
 }else if(this.isRSE890){
 table=table['rse890'];
 }
+
 
 if(!table.tierSet){
 table.tierSet=table.tiers.map(function(r){
@@ -1161,10 +1164,10 @@ this.dex=Dex;
 this.isDoubles=format.includes('doubles');
 this.isLetsGo=format.startsWith('letsgo');
 this.isRBY890=format.startsWith('rby890');
-if(this.isRBY890)format=format.slice(6);
-this.isRBY890=format.startsWith('rse890');
-if(this.isRSE890)format=format.slice(6);
+this.isRSE890=format.startsWith('rse890');
 if(this.isLetsGo)format=format.slice(6);
+if(this.isRBY890)format=format.slice(6);
+if(this.isRSE890)format=format.slice(6);
 
 this.results=null;
 this.defaultResults=null;
