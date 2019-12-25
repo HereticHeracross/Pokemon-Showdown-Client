@@ -833,10 +833,12 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		else
 			return genNum;
 		})();
-		const genData = Dex.mod(gen).data;
+		const genData = Dex.mod(gen).data && Dex.dexes.rby890.data && Dex.dexes.rse890.data;
+		var output5 = "";
 		const nextGenData = Dex.mod('gen' + (genNum2 + 1)).data;
 		const overrideStats = {};
 		BattleTeambuilderTable[gen].overrideStats = overrideStats;
+		output5 += util.inspect(gen) + "\n" + util.inspect(genData) + '\n' + util.inspect(overrideStats)
 		const overrideType = {};
 		BattleTeambuilderTable[gen].overrideType = overrideType;
 		const overrideAbility = {};
@@ -956,6 +958,7 @@ process.stdout.write("Building `data/pokedex.js`... ");
 	}
 	const buf = 'exports.BattlePokedex = ' + es3stringify(Pokedex) + ';';
 	fs.writeFileSync('data/pokedex.js', buf);
+	var output4 = util.inspect(Pokedex)
 }
 
 console.log("DONE");
@@ -1035,7 +1038,7 @@ process.stdout.write("Building `data/moves,items,abilities,typechart,learnsets.j
 console.log("DONE");
 
 // Write data in 'output.txt' . 
-fs.writeFile('output.txt', output2, (err) => { 
+fs.writeFile('output.txt', output5, (err) => { 
       
     // In case of a error throw err. 
     if (err) throw err; 
