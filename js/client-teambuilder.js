@@ -1163,7 +1163,16 @@
 			buf += '</div>';
 			buf += '<div class="setcell setcell-typeicons">';
 			var types = template.types;
-			var table = (this.curTeam.gen < 7 ? BattleTeambuilderTable['gen' + this.curTeam.gen] : null);
+			var table = (() => {
+			if (this.curTeam.gen < 7 && isRBY890 === false && isRSE890 === false)
+				return BattleTeambuilderTable['gen' + this.curTeam.gen]
+			if (isRBY890)
+				return BattleTeambuilderTable['rby890']
+			if (isRSE890)
+				return BattleTeambuilderTable['rse890']
+			else
+				return null;
+			})();
 			if (table && template.id in table.overrideType) types = table.overrideType[template.id].split('/');
 			if (types) {
 				for (var i = 0; i < types.length; i++) buf += Dex.getTypeIcon(types[i]);

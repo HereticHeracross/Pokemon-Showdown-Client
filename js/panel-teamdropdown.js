@@ -456,7 +456,7 @@ this.format=baseFormat;
 }
 var teams=this.getTeams();
 if(!teams.length&&this.format&&isFirstLoad){
-this.gen=this.format.slice(0,4);
+this.gen=this.format.slice(0,6);
 this.format='';
 teams=this.getTeams();
 }
@@ -481,14 +481,14 @@ var teamList=[];
 var baseGen=baseFormat.slice(0,4);
 var genList=[];for(var _i7=0,_PS$teams$list=
 PS.teams.list;_i7<_PS$teams$list.length;_i7++){var _team=_PS$teams$list[_i7];
-var gen=_team.format.slice(0,4);
+var gen=_team.format.slice(0,6);
 if(gen&&!genList.includes(gen))genList.push(gen);
 }
 var hasOtherGens=genList.length>1||genList[0]!==baseGen;
 
 teamList.push(preact.h("p",null,
 baseFormat.length>4&&preact.h("button",{"class":'button'+(baseFormat===this.format?' disabled':''),onClick:this.setFormat,name:"format",value:baseFormat},
-preact.h("i",{"class":"fa fa-folder-o"})," [",baseFormat.slice(0,4),"] ",baseFormat.slice(4))," ",
+preact.h("i",{"class":"fa fa-folder-o"})," [",baseFormat.slice(0,6),"] ",baseFormat.slice(6))," ",
 preact.h("button",{"class":'button'+(baseGen===this.format?' disabled':''),onClick:this.setFormat,name:"format",value:baseGen},
 preact.h("i",{"class":"fa fa-folder-o"})," [",baseGen,"] ",preact.h("em",null,"(uncategorized)"))," ",
 preact.h("button",{"class":'button'+(baseGen===this.gen?' disabled':''),onClick:this.setFormat,name:"gen",value:baseGen},

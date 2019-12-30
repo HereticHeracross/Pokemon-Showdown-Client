@@ -300,6 +300,8 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		const isDoubles = (genIdent < 0);
 		const isVGC = (genIdent === -7.5);
 		const genNum = (() => {
+		if (isRBY890 || isRSE890)
+			return genIdent
 		if (isDoubles)
 			return Math.floor(-genIdent)
 		else
@@ -836,6 +838,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		const genData = Dex.mod(gen).data;
 		var output5 = "";
 		const nextGenData = Dex.mod('gen' + (genNum2 + 1)).data;
+		output5 += util.inspect(Dex.data);
 		const overrideStats = {};
 		BattleTeambuilderTable[gen].overrideStats = overrideStats;
 		const overrideType = {};
@@ -849,6 +852,8 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		for (const id in genData.Pokedex) {
 			const pastEntry = genData.Pokedex[id];
 			const nowEntry = Dex.data.Pokedex[id];
+			const RBY890 = Dex.mod('rby890').data.Pokedex[id];
+			const RSE890 = Dex.mod('rse890').data.Pokedex[id];
 			const nowType = nowEntry.types.join('/');
 			for (const stat in pastEntry.baseStats) {
 				if (stat === 'spd' && genNum === 1) continue;
@@ -857,8 +862,20 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 					overrideStats[id][stat] = pastEntry.baseStats[stat];
 				}
 			}
+			if (genNum !== 1.1 || 3.1) {
 			if (pastEntry.types.join('/') !== nowType) {
 				overrideType[id] = pastEntry.types.join('/');
+			}
+			}
+			if (genNum === 1.1) {
+			if (RBY890.types.join('/') !== nowType) {
+				overrideType[id] = RBY890.types.join('/');
+			}
+			}
+			if (genNum === 3.1) {
+			if (RSE890.types.join('/') !== nowType) {
+				overrideType[id] = RSE890.types.join('/');
+			}
 			}
 			if (pastEntry.abilities['0'] !== nowEntry.abilities['0']) {
 				overrideAbility[id] = pastEntry.abilities['0'];
