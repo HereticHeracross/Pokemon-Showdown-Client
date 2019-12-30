@@ -833,10 +833,10 @@
 			} else if (this.gen === 7 && requirePentagon) {
 				table = table['gen' + this.gen + 'vgc'];
 				isDoublesOrBS = true;
-			} else if (table['gen' + this.gen + 'doubles'] && (format.includes('doubles') || format.includes('vgc') || format.includes('triples') || format.endsWith('lc') || format.endsWith('lcuu')) && !isLetsGo && !isRBY890 && !isRSE890) {
+			} else if (table['gen' + this.gen + 'doubles'] && (format.includes('doubles') || format.includes('vgc') || format.includes('triples') || format.endsWith('lc') || format.endsWith('lcuu')) && !isLetsGo) {
 				table = table['gen' + this.gen + 'doubles'];
 				isDoublesOrBS = true;
-			} else if (this.gen < 8) {
+			} else if (this.gen < 8 && this.isRBY890 === false && this.isRSE890 === false) {
 				table = table['gen' + this.gen];
 			} else if (isLetsGo) {
 				table = table['letsgo'];
@@ -1394,8 +1394,15 @@
 			return buf;
 		}
 
-		var gen = this.gen;
-		var table = (gen < 8 ? BattleTeambuilderTable['gen' + gen] : null);
+		var gen = (() => {
+				return this.gen;
+			})();
+		var table = (() => {
+			if (gen < 8)
+				return BattleTeambuilderTable['gen' + gen];
+			else
+				return null;
+			})();
 
 		// type
 		buf += '<span class="col typecol">';
@@ -1647,7 +1654,12 @@
 			return buf;
 		}
 
-		var table = (this.gen < 8 ? BattleTeambuilderTable['gen' + this.gen] : null);
+		var table = (() => {
+			if (this.gen < 8)
+				return BattleTeambuilderTable['gen' + this.gen];
+			else
+				return null;
+			})();
 
 		// type
 		buf += '<span class="col typecol">';
