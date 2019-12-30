@@ -3106,7 +3106,7 @@
 			var spriteSize = 96;
 			var spriteDim = 'width: 96px; height: 96px;';
 
-			var gen = {1:'gen1', 2:'gen2', 3:'gen3', 4:'gen4', 5:'gen5', 6:'dex', 7:'dex'}[Math.max(this.room.curTeam.gen, template.gen)];
+			var gen = {1:'gen1', 1.1:'rby890', 2:'gen2', 3:'gen3', 3.1:'rse890', 4:'gen4', 5:'gen5', 6:'dex', 7:'dex'}[Math.max(this.room.curTeam.gen, template.gen)];
 			if (Dex.prefs('nopastgens')) gen = 'dex';
 			if (Dex.prefs('bwgfx') && gen === 'dex') gen = 'gen5';
 			spriteDir += gen;

@@ -833,12 +833,11 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		else
 			return genNum;
 		})();
-		const genData = Dex.mod(gen).data && Dex.dexes.rby890.data && Dex.dexes.rse890.data;
+		const genData = Dex.mod(gen).data;
 		var output5 = "";
 		const nextGenData = Dex.mod('gen' + (genNum2 + 1)).data;
 		const overrideStats = {};
 		BattleTeambuilderTable[gen].overrideStats = overrideStats;
-		output5 += util.inspect(gen) + "\n" + util.inspect(genData) + '\n' + util.inspect(overrideStats)
 		const overrideType = {};
 		BattleTeambuilderTable[gen].overrideType = overrideType;
 		const overrideAbility = {};
