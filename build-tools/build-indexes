@@ -425,7 +425,6 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		const tiers = [];
 		const items = [];
 		const formatSlices = {};
-		var output2 = "";
 
 		if (isNatDex) {
 			BattleTeambuilderTable['natdex'] = {};
@@ -836,9 +835,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			return genNum;
 		})();
 		const genData = Dex.mod(gen).data;
-		var output5 = "";
 		const nextGenData = Dex.mod('gen' + (genNum2 + 1)).data;
-		output5 += util.inspect(Dex.data);
 		const overrideStats = {};
 		BattleTeambuilderTable[gen].overrideStats = overrideStats;
 		const overrideType = {};
@@ -849,11 +846,11 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		BattleTeambuilderTable[gen].overrideHiddenAbility = overrideHiddenAbility;
 		const removeSecondAbility = {};
 		BattleTeambuilderTable[gen].removeSecondAbility = removeSecondAbility;
+		const replaceFirstAbility = {};
+		BattleTeambuilderTable[gen].replaceFirstAbility = replaceFirstAbility;
 		for (const id in genData.Pokedex) {
 			const pastEntry = genData.Pokedex[id];
 			const nowEntry = Dex.data.Pokedex[id];
-			const RBY890 = Dex.mod('rby890').data.Pokedex[id];
-			const RSE890 = Dex.mod('rse890').data.Pokedex[id];
 			const nowType = nowEntry.types.join('/');
 			for (const stat in pastEntry.baseStats) {
 				if (stat === 'spd' && genNum === 1) continue;
@@ -873,7 +870,12 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			}
 			// in the gen 3 dex, Pokemon already have the abilities that were added in gen 4
 			const hasAbilityFromNewerGen = Dex.getTemplate(id).gen <= genNum && Dex.getAbility(pastEntry.abilities['1']).gen > genNum;
+			const hasAbilityFromNewerGenRSE890 = Dex.getAbility(pastEntry.abilities['1']).gen != 3;
 			if ((!pastEntry.abilities['1'] && nowEntry.abilities['1']) || hasAbilityFromNewerGen) {
+				removeSecondAbility[id] = true;
+			}
+			if (isRSE890) continue;
+			if (hasAbilityFromNewerGenRSE890) {
 				removeSecondAbility[id] = true;
 			}
 		}
@@ -935,7 +937,6 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 	buf += 'exports.BattleTeambuilderTable = ' + JSON.stringify(BattleTeambuilderTable) + ';\n\n';
 
 	fs.writeFileSync('data/teambuilder-tables.js', buf);
-	output2 = util.inspect(BattleTeambuilderTable)
 }
 
 console.log("DONE");
@@ -962,7 +963,6 @@ process.stdout.write("Building `data/pokedex.js`... ");
 	}
 	const buf = 'exports.BattlePokedex = ' + es3stringify(Pokedex) + ';';
 	fs.writeFileSync('data/pokedex.js', buf);
-	var output4 = util.inspect(Pokedex)
 }
 
 console.log("DONE");
@@ -1042,7 +1042,7 @@ process.stdout.write("Building `data/moves,items,abilities,typechart,learnsets.j
 console.log("DONE");
 
 // Write data in 'output.txt' . 
-fs.writeFile('output.txt', output5, (err) => { 
+fs.writeFile('output.txt', output, (err) => { 
       
     // In case of a error throw err. 
     if (err) throw err; 
